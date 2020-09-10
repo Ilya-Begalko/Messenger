@@ -1,6 +1,6 @@
 import time
 from datetime import datetime
-from flask import Flask, request
+from flask import Flask, request, abort
 
 app = Flask(__name__)
 db = []
@@ -43,7 +43,15 @@ def messages():
     else:
         after_id = 0
 
-    return {'messages': db[after_id:]}
+    max_limit = 100
+    if 'limit' in request.args:
+        limit = int(request.args['limit'])
+        if limit > max_limit:
+            abort(400, 'too big limit')
+        else:
+            limit = max_limit
+
+    return {'messages': db[after_id:after_id + limit]}
 
 
 app.run()

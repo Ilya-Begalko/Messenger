@@ -7,11 +7,11 @@ import requests
 def pretty_print(message):
     """
     2020/09/08 10:00:23  Nick
-    Text
+    Message
 
     """
     dt = datetime.fromtimestamp(message['timestamp'])
-    dt = dt.strftime('%Y/%m/%d %H:%M:%S')
+    dt = dt.strftime('%Y/%m/%d %H:%M')
     first_line = dt + '  ' + message['name']
     print(first_line)
     print(message['text'])
@@ -28,4 +28,5 @@ while True:
         pretty_print(message)
         after_id = message['id']
 
-    time.sleep(1)
+    if not messages:
+        time.sleep(1)
