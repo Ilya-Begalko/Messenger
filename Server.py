@@ -38,18 +38,24 @@ def send():
 
 @app.route("/messages")
 def messages():
-    if 'after_id' in request.args:
-        after_id = int(request.args['after_id']) + 1
+    if 'after_timestamp' in request.args:
+        after_timestamp = float(request.args['after_timestamp'])
     else:
-        after_id = 0
+        after_timestamp = 0
 
     max_limit = 100
     if 'limit' in request.args:
         limit = int(request.args['limit'])
         if limit > max_limit:
             abort(400, 'too big limit')
-        else:
-            limit = max_limit
+    else:
+        limit = max_limit
+
+    after_id = 0
+    for message in db:
+        if message['timestamp'] > after_timestamp:
+            break
+        after_id += 1
 
     return {'messages': db[after_id:after_id + limit]}
 

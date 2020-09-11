@@ -19,14 +19,14 @@ def pretty_print(message):
 
 
 url = 'http://127.0.0.1:5000/messages'
-after_id = -1
+after_timestamp = -1
 
 while True:
-    response = requests.get(url, params={'after_id': after_id})
+    response = requests.get(url, params={'after_timestamp': after_timestamp})
     messages = response.json()['messages']
     for message in messages:
         pretty_print(message)
-        after_id = message['id']
+        after_timestamp = message['timestamp']
 
     if not messages:
         time.sleep(1)
